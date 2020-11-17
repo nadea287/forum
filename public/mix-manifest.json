@@ -1,0 +1,13 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/css/main.css": "/css/main.css",
+    "/js/main.js": "/js/main.js",
+    "/js/session-message.js": "/js/session-message.js",
+    "/js/stripe-menu.js": "/js/stripe-menu.js",
+    "/js/delete-item.js": "/js/delete-item.js",
+    "/js/data.js": "/js/data.js",
+    "/js/comment.js": "/js/comment.js",
+    "/js/mark-solution.js": "/js/mark-solution.js",
+    "/js/tag.js": "/js/tag.js"
+}

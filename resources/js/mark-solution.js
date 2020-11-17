@@ -1,0 +1,43 @@
+var solutionBtn = document.getElementById('solutionBth');
+
+// solutionBtn.addEventListener('click', function (event) {
+//     markSolution(event);
+// });
+
+function markSolution(e) {
+    let btn = e.target;
+    // let commentId = btn.dataset.commentId;
+    let commentId = btn.id.split('-')[1];
+    $.ajax({
+        url: '/flag/solution/' + commentId,
+        method: 'POST',
+    }).done(function (result) {
+        console.log(result);
+        if (result.flagged) {
+            $(btn).addClass('text-danger');
+        } else {
+            $(btn).remove('text-danger');
+        }
+        getSolution(commentId, btn);
+        // solutionBtn.setAttribute("id", 'mark_solution');
+
+    }).fail(function (error) {
+        console.log(error);
+    });
+}
+
+function getSolution(commentId, btn)
+{
+    // console.log(commentId);
+    let solutionsCount = document.querySelector('.solutions-count');
+    $.ajax({
+        url: '/api/solution/' + commentId,
+        method: 'GET',
+    }).done(function (response) {
+        let solutionVar = response.solution_count;
+
+        btn.innerHTML = solutionVar;
+    }).fail(function (error) {
+        console.log(error);
+    });
+}
