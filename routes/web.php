@@ -27,14 +27,19 @@ Route::post('/comment/create/{thread}', [\App\Http\Controllers\CommentController
 Route::post('/comment/reply/{comment}', [\App\Http\Controllers\CommentController::class, 'replyToComment'])->name('reply.store');
 //Route::post('/comment/{comment}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('comment.store');
 Route::get('/markAsRead', [\App\Http\Controllers\CommentController::class, 'markAsRead']);
+Route::put('/comment/{comment}', [\App\Http\Controllers\CommentController::class, 'update'])->name('comment.update');
+Route::delete('/comment/{comment}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('comment.destroy');
 
 //MARK AS SOLUTION
-Route::post('/flag/{type}/{target}', [\App\Http\Controllers\FlagController::class, 'setFlag']);
-Route::get('/api/solution/{comment}', [\App\Http\Controllers\FlagController::class, 'getFlag']);
+Route::post('/flag/{type}/{target}/{ajax?}', [\App\Http\Controllers\FlagController::class, 'setFlag']);
+//Route::get('/api/solution/{comment}', [\App\Http\Controllers\FlagController::class, 'getFlag']);
 
 Route::get('/profile/{user}', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 Route::get('/profile/{user}/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/{user}', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+//SEARCH
+Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search']);
 
 Route::view('/blog/index', 'blog/index');
 Route::view('/blog/first', 'blog/first');

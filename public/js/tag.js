@@ -1,3 +1,8 @@
 $(function () {
-    $('#tag').selectize();
+    $('#tag').selectize({
+        maxItems: 3
+    });
+
 });
+
+

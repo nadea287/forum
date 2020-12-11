@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CollectionHelper;
 use App\Http\Requests\StoreThreadRequest;
 use App\Http\Requests\UpdateThreadRequest;
 use App\Models\Tag;
 use App\Models\Thread;
 use App\Policies\ThreadPolicy;
+use App\QueryFilters\Desc;
+use App\QueryFilters\MonthOld;
+use App\QueryFilters\WeekOld;
 use Illuminate\Http\Request;
+use App\Support\Collection;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class ThreadController extends Controller
 {
@@ -19,32 +26,31 @@ class ThreadController extends Controller
 
     public function index()
     {
-//        if (request('tag')) {
-//            $tag = Tag::find(request('tag'));
-//            $threads = $tag->threads;
-//            dump($threads);
-//        } else {
-//            $threads = Thread::all();
-//        }
-        return view('thread.index');
+            $threads = app(Pipeline::class)
+                ->send(Thread::query())
+                ->through([
+                    Desc::class,
+                    WeekOld::class,
+                    MonthOld::class,
+                ])
+                ->thenReturn()
+                ->get();
+            $threads = (new Collection($threads))->paginate(10);
+            if (request('tag')) {
+                $tag = Tag::find(request('tag'));
+                $threads = $tag->threads;
+                $threads = (new Collection($threads))->paginate(2);
+            } else {
+                Session::flash('place', 'thread');
+            }
+            return view('thread.index', compact('threads'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('thread.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreThreadRequest $request)
     {
         $data = $request->validated();
@@ -65,26 +71,12 @@ class ThreadController extends Controller
     {
         $this->authorize('update', $thread);
 
-//        foreach ($thread->tags as $tag)
-//        $tage = $tag->tag_id;
-//        dd($tage);
-//           $here = Tag::where('id', $tag)->get();
-//        dd($here);
-            $threadId = $thread->id;
-            $tags = Tag::whereHas('threads', function ($query) use($threadId) {
-//                $query->where('id', $threadId);
-                $query->where('tag_thread.thread_id', $threadId);
-            })->get();
-            foreach($tags as $tag) {
-                $tagId = $tag->id;
-//                $same = Tag::whereIn('id', $tags)->pluck('id');
-//                dd($same);
-            }
-//            dd($tag->id); id of tags of this particular thread
+        $thread = $thread->load('tags');
+        $tagsRest = Tag::whereHas('threads', function ($query) use($thread) {
+            $query->where('tag_thread.thread_id', '!=', $thread->id);
+        })->get();
 
-
-
-        return view('thread.edit', compact('thread', 'tagId'));
+        return view('thread.edit', compact('thread', 'tagsRest'));
     }
 
     public function update(UpdateThreadRequest $request, Thread $thread)

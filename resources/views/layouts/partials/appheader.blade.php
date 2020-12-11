@@ -55,14 +55,12 @@
             <div class="dropdown-wrapper">
                 <ul class="dropdown-menu-bar">
                     <li>
-                        <div class="dropdown-icon">
                          @forelse(auth()->user()->unreadNotifications as $notification)
                              @include('layouts.partials.notification/' .
                                     snake_case(class_basename($notification->type)))
                              @empty
                              There are no notifications
                          @endforelse
-                        </div>
                     </li>
                 </ul>
             </div>

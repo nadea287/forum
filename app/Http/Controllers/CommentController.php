@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCommentRequest;
 use App\Http\Requests\ReplyToCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Thread;
 use App\Notifications\RepliedToThread;
@@ -67,5 +68,16 @@ class CommentController extends Controller
             ->delete();
             }
 
+    }
+
+    public function update(UpdateCommentRequest $request, Comment $comment)
+    {
+        $data = $request->validated();
+        $comment->update($data);
+    }
+
+    public function destroy(Comment $comment)
+    {
+        $comment->delete();
     }
 }

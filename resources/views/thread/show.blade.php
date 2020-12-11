@@ -29,26 +29,24 @@
         </div>
         <div class="thread-comment">
            <div class="comment-form">
-                   <div class="txtb">
-                       <input type="text" name="body" placeholder="Leave a Comment" autocomplete="off" required>
-                        <span class="login-form-span"></span>
-                   </div>
-                   @error('body')
-                    <small class="font-weight-bold text-danger">{{ $message }}</small>
-                   @enderror
-                   <div class="cta-wrapper">
-                       <button type="submit" class="cta save-comment" id="{{ $thread->id }}">Save comment</button>
-                   </div>
+               <div class="txtb">
+                   <input type="text" name="body" placeholder="Leave a Comment" autocomplete="off" required>
+                    <span class="login-form-span"></span>
+               </div>
+               @error('body')
+                <small class="font-weight-bold text-danger">{{ $message }}</small>
+               @enderror
+{{--               <div class="cta-wrapper">--}}
+                   <button type="submit" class="buttons leave-comment-btn save-comment" id="{{ $thread->id }}">Save comment</button>
+{{--               </div>--}}
            </div>
             <div class="comments-display-wrapper">
                 <div class="comment-properties">
 {{--                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSE2_4ZaThwQbloPcJIs0DK-Dcf3XuK5JHZ9g&usqp=CAU" alt="">--}}
-
                     <div class="comment-cred">
                         <div class="user_name"></div>
                         <div class="comment-data"></div>
                         <div class="solutions-count-x"></div>
-
                     </div>
                 </div>
                 @foreach($thread->comments as $comment)
@@ -56,36 +54,44 @@
                     <div class="comment-properties">
                         {{--                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSE2_4ZaThwQbloPcJIs0DK-Dcf3XuK5JHZ9g&usqp=CAU" alt="">--}}
                         <div class="comment-cred">
-                            <span class="display-user_name">{{ $comment->user->name }}</span>
+                            <div class="comment-actions" data-id="{{ $comment->id }}">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <i class="fa fa-pencil delete-comment" id="{{ $comment->id }}" aria-hidden="true"></i>
+                                <span class="display-user_name">{{ $comment->user->name }}</span>
+                            </div>
                             <span class="display-comment-data">{{ $comment->body }}</span>
-
-
                             <div class="thumb_up">
-                                <i class="fa fa-thumbs-up" id="solutionBth-{{ $comment->id }}"
-                                   data-comment-id="{{ $comment->id }}" aria-hidden="true"
-                                   onclick="markSolution(event)">
-                                    <div class="solutions-count">{{ $comment->hasSolution->count() }}</div>
-                                </i>
-                                {{--                                <div class="solutions-count" data-comment="{{ $comment->id }}">{{ $comment->hasSolution->count() }}</div>--}}
+{{--                                <i class="fa fa-heart-o" aria-hidden="true" id="solutionBth-{{ $comment->id }}" onclick="markSolution(event)" data-comment-id="{{ $comment->id }}">--}}
+{{--                                <i class="fa fa-thumbs-up" id="solutionBth-{{ $comment->id }}"--}}
+{{--                                   data-comment-id="{{ $comment->id }}" aria-hidden="true"--}}
+{{--                                   onclick="markSolution(event)">--}}
+{{--                                    <div class="solutions-count">{{ $comment->hasSolution->count() }}</div>--}}
+{{--                                </i>--}}
+                                @include('thread.mark-solution')
                             </div>
-
                             <div class="append-reply">
-                            <button data-comment-id="{{ $comment->id }}" class="reply-btn buttons" onclick="toggleReply(event)">reply</button>
+                            <button data-comment-id="{{ $comment->id }}"
+                                    class="reply-btn buttons" onclick="toggleReply(event)">
+                                reply
+                            </button>
                             </div>
-
                             <div class="reply-form-{{ $comment->id }} hide-reply-form">
                                 <form action="{{ route('reply.store', ['comment' => $comment->id]) }}" method="POST">
                                     @csrf
                                     <div class="comment-form">
                                         <div class="txtb">
-                                            <input type="text" name="body" placeholder="reply" autocomplete="off" required>
+                                            <input type="text" name="body" placeholder="reply"
+                                                   autocomplete="off" required>
                                             <span class="login-form-span"></span>
                                         </div>
                                         @error('body')
                                         <small class="font-weight-bold text-danger">{{ $message }}</small>
                                         @enderror
                                         <div class="cta-wrapper">
-                                            <button type="submit" class="cta save-reply-btn" onclick="saveReply(event)" id="{{ $comment->id }}">Save Reply</button>
+                                            <button type="submit" class="cta save-reply-btn"
+                                                    onclick="saveReply(event)" id="{{ $comment->id }}">
+                                                Save Reply
+                                            </button>
                                         </div>
                                     </div>
                                 </form>

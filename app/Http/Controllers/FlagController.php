@@ -9,59 +9,63 @@ use function PHPUnit\Framework\isEmpty;
 
 class FlagController extends Controller
 {
-    public function setFlag($type, $target)
+    public function setFlag($type, $target, $ajax=false)
     {
         if (!Flag::isAllowed($type)) {
             return [];
         }
 
-        $result = Flag::where([
+        $flag = Flag::where([
            'author_id' => auth()->user()->id,
            'target_id' => $target,
            'type' => $type,
-        ])->get();
+        ])->get()->first();
 
-        if ($result->isEmpty()) {
-            Flag::create([
+        if ($flag == null) {
+            $flag = Flag::create([
                 'author_id' => auth()->user()->id,
                 'target_id' => $target,
                 'type' => $type,
             ]);
-            $result = collect([
-                'flagged' => true,
-            ]);
+//            $result = collect([
+//                'flagged' => true,
+//            ]);
         } else {
             $this->unsetFlag($type, $target);
 
-            $result = collect([
-                'flagged' => false,
-            ]);
+//            $result = collect([
+//                'flagged' => false,
+//            ]);
+        }
+        if ($ajax == false) {
+
+        } else {
+            return view('thread.mark-solution', ['comment' => $flag->target]);
         }
 
 
-
-        return response()->json($result);
+//        return response()->json($result);
     }
 
-    public function getFlag(Comment $comment)
-    {
-//        $val = [];
-//        $changeColour = Flag::where('author_id', auth()->user()->id)->get();
-//        if ($changeColour->isEmpty()) {
+//    public function getFlag(Comment $comment)
+//    {
+////        $val = [];
+////        $changeColour = Flag::where('author_id', auth()->user()->id)->get();
+////        if ($changeColour->isEmpty()) {
+////
+////        return $val = 1;
+////        }
+////        $changeColour - object
+////        if (array_map(auth()->user()->id, $changeColour)) {
+////            return $val = [1];
+////    }
+//        $result = collect([
+//            'solution_count' => $comment->hasSolution->count(),
+////            'change_colour' => $val,
+//        ]);
 //
-//        return $val = 1;
-//        }
-//        $changeColour - object
-//        if (array_map(auth()->user()->id, $changeColour)) {
-//            return $val = [1];
+//        return response()->json($result);
 //    }
-        $result = collect([
-            'solution_count' => $comment->hasSolution->count(),
-//            'change_colour' => $val,
-        ]);
-
-        return response()->json($result);
-    }
 
     public function unsetFlag($type, $target)
     {

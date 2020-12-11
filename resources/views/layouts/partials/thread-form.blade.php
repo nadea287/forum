@@ -11,13 +11,15 @@
 <div class="form-group">
     <label for="tag">Tag</label>
     <select id="tag" name="tag[]" multiple>
-        @foreach(\App\Models\Tag::all() as $tag)
-{{--        @foreach($tags as $tagId)--}}
-            <option value="{{ $tag->id }}" {{ $tagId == $tag->id ? 'selected' : '' }}>{{ $tag->name }}</option>
-{{--            <option value="{{ $tag->id }}" {{  $tagId == $tag->id ? 'selected' : '' }}>{{ $tag->name }}</option>--}}
-
-{{--            @endforeach--}}
-        @endforeach
+{{--        @foreach(\App\Models\Tag::all() as $tag)--}}
+        @isset($thread)
+            @foreach($thread->tags as $tag)
+                <option value="{{ $tag->id }}" selected>{{ $tag->name }}</option>
+                @endforeach
+            @foreach($tagsRest as $tag)
+                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                @endforeach
+        @endisset
     </select>
 </div>
 <div class="form-group">
