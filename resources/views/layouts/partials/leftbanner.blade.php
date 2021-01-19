@@ -26,11 +26,10 @@
                     </a>
                     @foreach(\App\Models\Tag::all() as $tag)
                     <a href="{{ route('thread.index', ['tag' => $tag->id]) }}">
-                        <li class="{{ request()->tag == $tag->id ? 'active_link' : '' }}">
+                        <li class="{{ setActiveTag($tag->id) }}">
                             {{ $tag->name }}
                             <span>
-                                {{ \Illuminate\Support\Facades\DB::table('tag_thread')
-                                ->where('tag_id', $tag->id)->count() }}
+                                {{ tagCount($tag->id) }}
                             </span>
                         </li>
                     </a>

@@ -35,11 +35,13 @@ class ThreadController extends Controller
                 ])
                 ->thenReturn()
                 ->get();
+
             $threads = (new Collection($threads))->paginate(10);
             if (request('tag')) {
                 $tag = Tag::find(request('tag'));
                 $threads = $tag->threads;
                 $threads = (new Collection($threads))->paginate(2);
+                session()->forget('place');
             } else {
                 Session::flash('place', 'thread');
             }

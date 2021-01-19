@@ -6,6 +6,6 @@
         <a href=""><i class="fa fa-instagram" aria-hidden="true"></i></a>
     </div>
     <div class="footer-text">
-        <h6>Copyright<span>&#169;</span><?php echo date("Y"); ?>. All rights reserved</h6>
+        <span>Copyright<span>&#169;</span><?php echo date("Y"); ?>. All rights reserved</span>
     </div>
 </section>

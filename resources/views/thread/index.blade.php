@@ -2,7 +2,7 @@
 @section('content')
     <div class="all-threads-wrapper">
         <div class="all-threads-top">
-            <a href="{{ route('thread.create') }}" class="buttons leave-comment-btn">Create Thread</a>
+            <a href="{{ route('thread.create') }}" class="buttons standart-button leave-comment-btn">Create Thread</a>
             <div class="d-flex">
                 <h3>All Threads</h3>
                 <div class="sort-threads-form">
@@ -17,6 +17,7 @@
                 </div>
             </div>
         </div>
+
         <ul class="list-group">
             @include('layouts.partials.thread-list')
         </ul>

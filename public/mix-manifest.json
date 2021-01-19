@@ -9,5 +9,7 @@
     "/js/data.js": "/js/data.js",
     "/js/comment.js": "/js/comment.js",
     "/js/mark-solution.js": "/js/mark-solution.js",
-    "/js/tag.js": "/js/tag.js"
+    "/js/tag.js": "/js/tag.js",
+    "/js/checkout.js": "/js/checkout.js",
+    "/js/cart.js": "/js/cart.js"
 }

@@ -24,6 +24,8 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "gasparesganga-jquery-message-box": "^3.2.2"
+        "gasparesganga-jquery-message-box": "^3.2.2",
+        "lightslider": "^1.1.6",
+        "slick-carousel": "^1.8.1"
     }
 }

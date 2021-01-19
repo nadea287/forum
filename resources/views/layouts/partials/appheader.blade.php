@@ -46,6 +46,14 @@
                     <a class="stripe-btn stripe-signin-btn" href="{{ route('register') }}">register</a>
             @endif
         @else
+           <div class="pr-3">
+               <a href="{{ route('cart.index') }}">
+                   <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                   @if(\Gloudemans\Shoppingcart\Facades\Cart::instance()->count() > 0 )
+                        <span>{{ \Gloudemans\Shoppingcart\Facades\Cart::instance()->count() }}</span>
+                   @endif
+               </a>
+           </div>
         <div class="notify-count-wrapper">
             <div class="drop-btn mark-as-read">
                 <i class="fa fa-bell-o" aria-hidden="true"></i>

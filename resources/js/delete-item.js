@@ -6,11 +6,15 @@ $(function () {
     });
 
     swallConfirmDeleteProfile('.thread-delete-btn', 'sure?', '.thread-content', 'thread');
+    swallConfirmDeleteProfile('.cart-delete-item', 'sure?', '.cart-item-container', 'cart');
+    swallConfirmDeleteProfile('.saveforlater-delete-item', 'sure?', '.saveforlater-item-container', 'save-for-later');
 
     function swallConfirmDeleteProfile(button, text, deleteSth, type) {
         $(button).on("click", function () {
             var id = $(this).attr('id');
             var $this = $(this);
+            var redirect = $(this).data('redirect');
+            console.log(redirect);
             swal({
                 title: "Are you sure?",
                 text: text,
@@ -25,6 +29,9 @@ $(function () {
                         });
                         $this.closest(deleteSth).remove();
                         deleteItem(type, id);
+                        if (redirect == 1) {
+                            return false;
+                        }
                         location.href = "/thread";
                     }
                 });

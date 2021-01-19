@@ -2,7 +2,7 @@ const sublinks = [
     {
         page: 'products',
         links: [
-            { label: 'payment', icon: 'fa fa-credit-card', url: 'products.html' },
+            { label: 'all products', icon: 'fa fa-credit-card', url: '/products' },
             { label: 'terminal', icon: 'fa fa-credit-card', url: 'products.html' },
             { label: 'connect', icon: 'fa fa-credit-card', url: 'products.html' },
         ],

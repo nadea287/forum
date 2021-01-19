@@ -51,11 +51,13 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.partials.leftbanner', function ($view) {
             $tagId = Tag::select('id')->get();
-            foreach ($tagId as $id) {
-                $count = DB::table('tag_thread')->whereIn('tag_id', $id)->count();
-//                dd($count);
-            }
-            $view->with('count', $count);
+//            if (!empty($tagId)) {
+//                foreach ($tagId as $id) {
+//                    $count = DB::table('tag_thread')->whereIn('tag_id', $id)->count();
+//                    dd($count);
+//                }
+//                $view->with('count', $count);
+//            }
         });
     }
 }
