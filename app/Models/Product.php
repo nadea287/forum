@@ -10,9 +10,23 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+      'name',
+      'slug',
+      'details',
+      'price',
+      'description',
+      'cover_image',
+    ];
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 
     public function presentPrice()
@@ -29,4 +43,10 @@ class Product extends Model
     {
         return $query->inRandomOrder()->take(4);
     }
+
+    public function coverImage()
+    {
+        return '/storage/' . $this->cover_image;
+    }
+
 }

@@ -65,9 +65,11 @@ Route::group(['prefix' => 'save-for-later'], function () {
     Route::post('switch-to-cart/{product}', [\App\Http\Controllers\SaveForLaterCntroller::class, 'moveToCart'])->name('switchForLater.moveToCart');
 });
 
-Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout.index')->middleware('auth');
 Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 Route::delete('/checkout', [\App\Http\Controllers\CheckoutController::class, 'destroy'])->name('checkout.destroy');
+
+Route::get('/guestCheckout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('guestCheckout.index');
 
 //coupon
 Route::post('/coupon', [\App\Http\Controllers\CouponsController::class, 'store'])->name('coupon.store');

@@ -17,8 +17,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap2.min.css">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/commerce.css') }}">
     <link rel="stylesheet" href="{{ asset('css/stripe.css') }}">
 </head>
+@if(!request()->is('guestCheckout'))
 <nav class="stripe-nav">
     <div class="stripe-nav-center">
         <div class="stripe-nav-header">
@@ -40,20 +42,20 @@
                 <button class="stripe-link-btn">company</button>
             </li>
         </ul>
+            <div class="pr-3">
+                <a href="{{ route('cart.index') }}">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    @if(\Gloudemans\Shoppingcart\Facades\Cart::instance()->count() > 0 )
+                        <span>{{ \Gloudemans\Shoppingcart\Facades\Cart::instance()->count() }}</span>
+                    @endif
+                </a>
+            </div>
         @guest
         <a href="{{ route('login') }}" class="stripe-btn stripe-signin-btn">login</a>
             @if (Route::has('register'))
                     <a class="stripe-btn stripe-signin-btn" href="{{ route('register') }}">register</a>
             @endif
         @else
-           <div class="pr-3">
-               <a href="{{ route('cart.index') }}">
-                   <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                   @if(\Gloudemans\Shoppingcart\Facades\Cart::instance()->count() > 0 )
-                        <span>{{ \Gloudemans\Shoppingcart\Facades\Cart::instance()->count() }}</span>
-                   @endif
-               </a>
-           </div>
         <div class="notify-count-wrapper">
             <div class="drop-btn mark-as-read">
                 <i class="fa fa-bell-o" aria-hidden="true"></i>
@@ -116,6 +118,8 @@
 
     </div>
 </nav>
+@endif
+
 
 {{--<section class="stripe-hero">--}}
 {{--    <div class="stripe-hero-center">--}}

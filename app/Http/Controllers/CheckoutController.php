@@ -8,11 +8,16 @@ use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
+        if (auth()->user() && request()->is('guestCheckout')) {
+            return redirect()->route('checkout.index');
+        }
+
         return view('product.checkout')->with([
             'discount' => $this->getNumbers()->get('discount'),
             'newSubtotal' => $this->getNumbers()->get('newSubtotal'),
@@ -61,6 +66,7 @@ class CheckoutController extends Controller
 
         $discount = session()->get('coupon')['discount'] ?? 0;
         $discFormat = number_format((float) str_replace(' ', '', $discount), 2);
+//        Str::of($discount)->replace(' ', '');
         $newSubtotal = str_replace(',', '', number_format((float) str_replace(' ', '', Cart::subtotal()), 2)) - $discFormat;
         $newTax = $newSubtotal * number_format((float) $tax, 2);
         $newTotal = $newSubtotal + $newTax;

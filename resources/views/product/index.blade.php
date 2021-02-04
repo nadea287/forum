@@ -23,13 +23,14 @@
                             'sort' => 'low_high']) }}">low to high</a>
                     <a href="{{ route('products.index', ['category' => request()->category,
                             'sort' => 'high_low']) }}">high to low</a>
+                    <a href="{{ route('products.create') }}" class="btn btn-sm btn-outline-light offset-7"><span>Create a product</span></a>
                 </div>
             </div>
             <div class="row d-flex justify-content-around">
                 @forelse($products as $product)
                     <div class="card my-4" style="width: 18rem;">
                         <a href="{{ $product->path() }}">
-                            <img src="{{ asset('/images/product.jpg') }}" class="card-img-top" alt="...">
+                            <img src="{{ asset($product->coverImage()) }}" class="card-img-top" alt="...">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
@@ -49,7 +50,7 @@
                 @endforelse
             </div>
         </div>
-
+        @include('layouts.partials.session-message')
     </div>
     </div>
     {{ $products->appends(request()->input())->links() }}

@@ -4,17 +4,20 @@ $.ajaxSetup({
     }
 });
 
-const selectQuantity = document.querySelector('.quantity');
-const itemPrice = document.querySelector('.cart-item-price');
-selectQuantity.addEventListener('change', function (e) {
+const quantityForms = document.querySelectorAll('.select-qty');
+// const itemPrice = document.querySelectorAll('.cart-item-price');
+
+for (let i = 0; i < quantityForms.length; i++) {
+
+quantityForms[i].children[1].addEventListener('change', function (e) {
     let id = e.target.dataset.id;
-    let selectedOption = selectQuantity.value;
-    let selectesAttribute = selectQuantity.options[selectQuantity.options.selectedIndex].value;
-        Array.from(selectQuantity).forEach(function (element) {
+    let selectedOption = e.target.value;
+    // let selectesAttribute = selectQuantity.options[selectQuantity.options.selectedIndex].value;
+        Array.from(e.target).forEach(function (element) {
             let innerValues = element.innerHTML;
             Array.from(innerValues).forEach(function (item) {
                 if (item == selectedOption) {
-                    selectQuantity.options[selectQuantity.options.selectedIndex].setAttribute("selected", "");
+                    e.target.options[e.target.options.selectedIndex].setAttribute("selected", "");
                 } else {
                     element.removeAttribute("selected");
                 }
@@ -29,11 +32,12 @@ selectQuantity.addEventListener('change', function (e) {
         }).done(function (result) {
             let dataResult = JSON.parse(result);
             let price = dataResult.price;
-            itemPrice.innerHTML = price;
+            quantityForms[i].children[0].innerHTML = price;
         }).fail(function (error) {
             console.log(error);
         });
     });
+}
 
     // const classname = document.querySelectorAll('.cart-items .quantity');
     // const classname = document.querySelectorAll('.quantity');
@@ -70,3 +74,32 @@ selectQuantity.addEventListener('change', function (e) {
     //     })
     // });
 
+
+const inpFile = document.getElementById("inpFile");
+const previewContainer = document.getElementById("imagePreview");
+
+inpFile.addEventListener("change", function () {
+    //this - refers to the input
+    const file = this.files;
+    console.log('file');
+
+    if (file) {
+        [].forEach.call(file, readAndPreview);
+    }
+    function readAndPreview(file) {
+        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+            return alert(file.name + " is not an image");
+        } else {
+            const reader = new FileReader();
+            reader.addEventListener('load', function () {
+                const image = new Image();
+                image.height = 100;
+                image.width = 100;
+                image.title = file.name;
+                image.src = this.result;
+                previewContainer.appendChild(image);
+            });
+            reader.readAsDataURL(file);
+        }
+    }
+});

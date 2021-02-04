@@ -11,11 +11,16 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Email</label>
-                        <input name="email" type="email" class="form-control" id="inputEmail4"
-                               value="{{ old('email') }}" required>
+                        @if(auth()->user())
+                            <input name="email" type="email" class="form-control" id="inputEmail4"
+                               value="{{ auth()->user()->email }}" readonly>
+                        @else
+                            <input name="email" type="email" class="form-control" id="inputEmail4"
+                                   value="{{ old('email') }}" required>
+                        @endif
                         @error('email')
                         <small class="text-danger font-weight-bold">
-                            {{ $message }}
+                            {!! $message !!}
                         </small>
                         @enderror
                     </div>

@@ -195,3 +195,53 @@ function stripeTokenHandler(token) {
     // Submit the form
     form.submit();
 }
+
+
+
+// var i = 1;                  //  set your counter to 1
+//
+// function myLoop() {         //  create a loop function
+//     setTimeout(function() {   //  call a 3s setTimeout when the loop is called
+//         console.log(i);   //  your code here
+//         i++;                    //  increment the counter
+//         if (i <= 10) {           //  if the counter < 10, call the loop function
+//             myLoop();             //  ..  again which will trigger another
+//         }                       //  ..  setTimeout()
+//     }, 300)
+// }
+//
+// myLoop();
+
+// var intervalId = setInterval(function(){
+//     var timoutId = setTimeout(function(){
+//         var i = 1;
+//         i++;
+//         if (i < 10) {
+//             console.log(i);
+//         }
+//     }, 1000, setInterval(1000));
+// });
+
+// let result = 0;
+// function showNumber(num) {
+//     num++;
+//     result += num;
+//     console.log(result);
+//     if (result < 10) {
+//          clearInterval(timeId);
+//     }
+// }
+//     let timeId = setTimeout(showNumber, 500, 1);
+
+var counter = 0;
+var i = setInterval(function(){
+    var timeoutId = setTimeout(function () {
+        console.log(counter);
+        counter++;
+        if(counter === 10) {
+            counter = -counter;
+            i++;
+            clearInterval(i);
+        }
+    }, 300);
+}, 200);

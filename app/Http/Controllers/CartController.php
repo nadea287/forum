@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
+//    public function __construct()
+//    {
+//        $this->middleware('auth');
+//    }
+
     public function index()
     {
         $mightAlsoLike = Product::mightAlsoLike()->get();

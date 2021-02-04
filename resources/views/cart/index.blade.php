@@ -23,7 +23,7 @@
                         <div class="cart-item-details">
                             <a href="{{ route('products.show', ['product' => $item->model->id,
                                                                      'slug' => $item->model->name]) }}">
-                                <img src="{{ asset('/images/product.jpg') }}" alt="">
+                                <img src="{{ asset('/storage/' . $item->model->cover_image) }}" alt="">
                             </a>
                             <div class="cart-item-description">
                                 <span>{{ $item->model->name }}</span>
