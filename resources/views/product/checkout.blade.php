@@ -158,7 +158,7 @@
                         <span>
                                Total
                                <strong>
-                                  $ {{ presentPrice($newTotal) }}
+                                   {{ presentPrice($newTotal) }}
                                </strong>
                            </span>
                     </div>

@@ -23,6 +23,11 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+//
+//    public function order()
+//    {
+//        return $this->belongsTo(Order::class);
+//    }
 
     public function images()
     {

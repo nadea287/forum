@@ -48,6 +48,7 @@ Route::group(['prefix' => 'profile'], function () {
 
 //SEARCH
 Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search']);
+Route::get('/products/search', [\App\Http\Controllers\SearchController::class, 'productSearch'])->name('product.search');
 
 //products
 Route::resource('products', \App\Http\Controllers\ProductController::class);

@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutRequest;
+use App\Jobs\SendTransactionalEmail;
+use App\Mail\OrderPlaces;
+use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Traits\CheckoutTrait;
 use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
@@ -47,6 +53,13 @@ class CheckoutController extends Controller
                     'discount' => collect(session()->get('coupon'))->toJson(),
                 ],
             ]);
+
+            $order = $this->addToOrdersTable($request, null);
+//            Mail::send(new OrderPlaces($order));
+
+            SendTransactionalEmail::dispatch($order)
+            ->delay(now()->addSeconds(5));
+
 //            SUCCESS
             Cart::instance('default')->destroy();
             session()->forget('coupon');
@@ -55,8 +68,41 @@ class CheckoutController extends Controller
             return redirect()->route('confirmation.index');
 
         } catch (CardErrorException $e) {
+            $this->addToOrdersTable($request, $e->getMessage());
             return back()->withErrors('Error!' . $e->getMessage());
         }
+    }
+
+    protected function addToOrdersTable($request, $error)
+    {
+        //insert into orders table
+        $order = Order::create([
+            'user_id' => auth()->user() ? auth()->user()->id : null,
+            'billibng_email' => $request->email,
+            'billing_name' => $request->name,
+            'billing_city' => $request->city,
+            'billing_province' => $request->province,
+            'billing_postalcode' => $request->postalcode,
+            'billing_phone' => $request->phone,
+            'billing_name_on_card' => $request->name_on_card,
+            'billing_discount' => $this->getNumbers()->get('discount'),
+            'billing_discount_code' => $this->getNumbers()->get('code'),
+            'billing_subtotal' => $this->getNumbers()->get('newSubtotal'),
+            'billing_tax' => $this->getNumbers()->get('tax'),
+            'billing_total' => $this->getNumbers()->get('newTotal'),
+            'error' => $error,
+        ]);
+
+        foreach (Cart::content() as $item) {
+            OrderProduct::create([
+                'order_id' => $order->id,
+                'product_id' => $item->model->id,
+                'quantity' => $item->qty,
+            ]);
+        }
+        //insert into order_product(pivot table)
+
+        return $order;
     }
 
     private function getNumbers()
@@ -68,8 +114,12 @@ class CheckoutController extends Controller
         $discFormat = number_format((float) str_replace(' ', '', $discount), 2);
 //        Str::of($discount)->replace(' ', '');
         $newSubtotal = str_replace(',', '', number_format((float) str_replace(' ', '', Cart::subtotal()), 2)) - $discFormat;
+        if ($newSubtotal < 0) {
+            $newSubtotal = 0;
+        }
         $newTax = $newSubtotal * number_format((float) $tax, 2);
         $newTotal = $newSubtotal + $newTax;
+        $code = session()->get('coupon')['name'] ?? null;
 
         return collect([
            'tax' => $tax,
@@ -77,6 +127,7 @@ class CheckoutController extends Controller
            'newSubtotal' => $newSubtotal,
            'newTax' => $newTax,
            'newTotal' => $newTotal,
+            'code' => $code,
         ]);
     }
 }

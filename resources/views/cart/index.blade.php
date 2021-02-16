@@ -3,12 +3,12 @@
     <div class="row">
         <div class="col-6">
             <x-breadcrumb>
-                <li class="breadcrumbs_item">
-                    <a href="{{ route('products.index') }}" class="breadcrumbs_link">All Products</a>
-                </li>
-                <li class="breadcrumbs_item">
-                    <a href="" class="breadcrumbs_link breadcrumbs_link_active">My Cart</a>
-                </li>
+                 <li class="breadcrumbs_item">
+                     <a href="{{ route('products.index') }}" class="breadcrumbs_link">All Products</a>
+                 </li>
+                 <li class="breadcrumbs_item">
+                     <a href="" class="breadcrumbs_link breadcrumbs_link_active">My Cart</a>
+                 </li>
             </x-breadcrumb>
         </div>
         <div class="col-6 offset-1 mb-4 cart-items">
@@ -22,7 +22,7 @@
                         {{--                    <div class="d-flex">--}}
                         <div class="cart-item-details">
                             <a href="{{ route('products.show', ['product' => $item->model->id,
-                                                                     'slug' => $item->model->name]) }}">
+                                                                    'slug' => $item->model->name]) }}">
                                 <img src="{{ asset('/storage/' . $item->model->cover_image) }}" alt="">
                             </a>
                             <div class="cart-item-description">
